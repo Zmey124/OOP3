@@ -17,6 +17,30 @@ class Student:
         else:
             return 'Ошибка'
 
+    def ave(self):
+      total_grade = 0
+      for course in self.grades:
+          total_grade += sum(self.grades[course])
+      return round(total_grade / len(self.grades), 2)
+    
+    def __str__(self):
+        student_str = f"Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за домашние задания: {self.ave()}\nКурсы в процессе изучения: {', '.join(self.courses_in_progress)}\nЗавершенные курсы: {', '.join(self.finished_courses)}"
+        return student_str
+
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            return "Невозможно сравнить с объектом не класса Student"
+        return self.ave() < other.ave()
+    
+    def __gt__(self, other):
+        if not isinstance(other, Student):
+            return "Невозможно сравнить с объектом не класса Student"
+        return self.ave() > other.ave()
+
+    def __eq__(self, other):
+        if not isinstance(other, Student):
+            return "Невозможно сравнить с объектом не класса Student"
+        return self.ave() == other.ave()
 
 class Mentor:
     def __init__(self, name, surname):
@@ -28,13 +52,13 @@ class Mentor:
 
 class Lecturer(Mentor):
 
-    def _average(self):  # средняя оценка за лекции
+    def ave(self):  # средняя оценка за лекции
       total_grade = 0
       for course in self.grades:
-          total_grade += self.grades[course]
-      return total_grade / len(self.grades)
+          total_grade += sum(self.grades[course])
+      return round(total_grade / len(self.grades), 2)
 
-    def _average_course(self, course):
+    def ave_course(self, course):
       summ_rate = 0
       len_rate = 0
       for keys in self.grades.keys():
@@ -45,9 +69,23 @@ class Lecturer(Mentor):
       return result
     
     def __str__(self):
-        lecturer_1 = f"Имя: {self.name} \nФамилия: {self.surname} Средняя оценка: {self._average()}"
+        lecturer_1 = f"Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекции: {self.ave()}"
         return lecturer_1
+
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            return "Невозможно сравнить с объектом не класса Lecturer"
+        return self.ave() < other.ave()
     
+    def __gt__(self, other):
+        if not isinstance(other, Lecturer):
+            return "Невозможно сравнить с объектом не класса Lecturer"
+        return self.ave() > other.ave()
+
+    def __eq__(self, other):
+        if not isinstance(other, Lecturer):
+            return "Невозможно сравнить с объектом не класса Lecturer"
+        return self.ave() == other.ave()
 
 class Reviewer(Mentor):
     
@@ -97,19 +135,31 @@ student.rate_lecturer(lecturer_1, 'C++', 2)
 print(lecturer_1)
 
 
+student2 = Student('Ruoy', 'Eman','Woman')
+student2.courses_in_progress += ['Python']
+student2.courses_in_progress += ['Git']
+student2.finished_courses += ['Введение в программирование']
 
+some_reviewer.rate(student2, 'Python', 9)
+some_reviewer.rate(student2, 'Python', 10)
+some_reviewer.rate(student2, 'Python', 8)
+print(student2)
 
+print(f'Сравнение студентов: {student} > {student2} = {student > student2}')
 
+lecturer_2 = Lecturer('Some', 'Buddy')
+lecturer_2.courses_attached += ['Python']
+lecturer_2.courses_attached += ['Git']
+lecturer_2.courses_attached += ['Введение в программирование']
+student2.rate_lecturer(lecturer_2, 'Python', 10)
+student2.rate_lecturer(lecturer_2, 'Python', 9)
+student2.rate_lecturer(lecturer_2, 'Python', 10)
+student2.rate_lecturer(lecturer_2, 'Git', 10)
+student2.rate_lecturer(lecturer_2, 'Git', 9)
+student2.rate_lecturer(lecturer_2, 'Git', 8)
+student2.rate_lecturer(lecturer_2, 'Введение в программирование', 10)
+student2.rate_lecturer(lecturer_2, 'Введение в программирование', 9)
+student2.rate_lecturer(lecturer_2, 'Введение в программирование', 10)
+print(lecturer_2)
 
-
-
-
-
-
-
-        
-        
- 
-    
-
-
+print(f'Сравнение лекторов: {lecturer_1} > {lecturer_2} = {lecturer_1 > lecturer_2}')
